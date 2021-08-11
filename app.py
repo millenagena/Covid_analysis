@@ -1,9 +1,4 @@
 import streamlit as st
-
-
-st.title('Funcionaaaaaa')
-
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -39,24 +34,20 @@ def grafico_comparativo(dados_2019, dados_2020, causa, estado = 'BRASIL'):
     return fig
 
 
-def main():
+obitos_2019 = carrega_dados('dados/obitos-2019.csv')
+obitos_2020 = carrega_dados('dados/obitos-2020.csv')
+estados = np.append(obitos_2019.uf.unique(), 'BRASIL')
+doencas = obitos_2019.tipo_doenca.unique()
 
-    obitos_2019 = carrega_dados('dados/obitos-2019.csv')
-    obitos_2020 = carrega_dados('dados/obitos-2020.csv')
-    estados = np.append(obitos_2019.uf.unique(), 'BRASIL')
-    doencas = obitos_2019.tipo_doenca.unique()
+st.title('Análise de óbitos')
+st.dataframe(obitos_2019)
+st.markdown('Este trabalho analisa dados dos óbitos por doenças respiratórias* nos anos de 2019 e 2020')
 
-    st.title('Análise de óbitos')
-    st.dataframe(obitos_2019)
-    st.markdown('Este trabalho analisa dados dos óbitos por doenças respiratórias* nos anos de 2019 e 2020')
+opcao_1 = st.sidebar.selectbox('Selecione a doença', options = doencas)
+opcao_2 = st.sidebar.selectbox('Selecione o estado', options = estados)
 
-    opcao_1 = st.sidebar.selectbox('Selecione a doença', options = doencas)
-    opcao_2 = st.sidebar.selectbox('Selecione o estado', options = estados)
-    
-    figura = grafico_comparativo(obitos_2019, obitos_2020, 
-                                 opcao_1, opcao_2)
-    st.pyplot(figura)
+figura = grafico_comparativo(obitos_2019, obitos_2020, 
+                                opcao_1, opcao_2)
+st.pyplot(figura)
 
 
-if __name__ == '_main_':
-    main()
